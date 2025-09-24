@@ -31,7 +31,9 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build-secure.js && vite build",
-    "build:github": "vite build",
+    "build:github": "cross-env NODE_ENV=production npm run build",
+    "build:ci": "npm run clean && npm run build:github",
+    "clean": "rimraf dist node_modules/.vite",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
     "predeploy": "npm run build",
@@ -39,10 +41,13 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:watch": "vitest --watch",
+    "test:ci": "vitest run --coverage",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:debug": "playwright test --debug",
-    "test:all": "npm run test && npm run e2e"
+    "test:all": "npm run test:ci && npm run e2e",
+    "lint": "echo 'Linting not configured yet'",
+    "validate": "npm run test:ci && npm run build:github"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
@@ -69,6 +74,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^10.0.0",
     "eslint-plugin-import": "^2.32.0",
     "jsdom": "^27.0.0",
     "msw": "^2.11.3",
@@ -76,6 +82,7 @@
     "postcss-html": "^1.8.0",
     "postcss-import": "^16.1.1",
     "postcss-scss": "^4.0.9",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.3.3",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",

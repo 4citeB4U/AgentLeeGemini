@@ -15,8 +15,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    const isProduction = mode === 'production' || process.env.NODE_ENV === 'production';
+    const isGitHubPages = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+    
     return {
-      base: process.env.NODE_ENV === 'production' ? '/AgentLeeGemini/' : '/',
+      base: isGitHubPages ? '/AgentLeeGemini/' : '/',
       server: {
         port: 3000,
         host: '0.0.0.0',
@@ -25,8 +28,9 @@ export default defineConfig(({ mode }) => {
       define: {
         // DO NOT expose API keys to client bundle
         // Only expose safe build-time flags
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || mode),
         'process.env.BUILD_TIME': JSON.stringify(new Date().toISOString()),
+        'process.env.CI': JSON.stringify(process.env.CI || 'false'),
       },
       resolve: {
         alias: {
@@ -35,15 +39,20 @@ export default defineConfig(({ mode }) => {
       },
       build: {
         outDir: 'dist',
-        sourcemap: false,
+        sourcemap: !isProduction,
+        minify: isProduction,
         rollupOptions: {
           output: {
             manualChunks: {
               vendor: ['react', 'react-dom'],
-              utils: ['@google/genai']
+              genai: ['@google/genai'],
+              transformers: ['@xenova/transformers', 'onnxruntime-web']
             }
           }
         }
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', '@google/genai']
       }
     };
 });
