@@ -1,7 +1,7 @@
 {
-  "deploymentTrigger": "2025-09-23T15:45:00Z",
-  "version": "1.0.0-production",
-  "status": "runtime-errors-resolved",
+  "deploymentTrigger": "2025-09-23T16:00:00Z",
+  "version": "1.0.0-cache-busted",
+  "status": "force-deployment-active",
   "security": {
     "apiKeyExposure": "resolved",
     "clientSideSecrets": "eliminated", 
@@ -14,9 +14,11 @@
     "consoleClean": true
   },
   "deployment": {
-    "githubPages": "enabled",
-    "workflow": "deploy.yml",
-    "environment": "production"
+    "githubPages": "cache-bust-active",
+    "workflow": "deploy.yml + manual-deploy.yml",
+    "environment": "production",
+    "cacheHeaders": "no-cache-applied",
+    "forceRefresh": true
   },
   "buildInfo": {
     "typeScriptErrors": "resolved",
