@@ -13,11 +13,24 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://yourusername.github.io/Agent-Lee_System",
+  "author": {
+    "name": "Leonard Lee",
+    "company": "Leeway Industries",
+    "url": "https://rapidwebdevelop.com"
+  },
+  "contributors": [
+    "Leonard Lee <leonard@leewayindustries.com>",
+    "Leeway Industries Team",
+    "Rapid Web Develop.com"
+  ],
+  "homepage": "https://4citeB4U.github.io/AgentLeeGemini",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4citeB4U/AgentLeeGemini.git"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run copy-images",
-    "copy-images": "xcopy /E /I /Y public\\images dist\\images",
+    "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
     "predeploy": "npm run build",
