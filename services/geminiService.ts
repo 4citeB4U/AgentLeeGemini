@@ -18,18 +18,38 @@ import type { Note } from '../types';
 
 // SECURITY: For production GitHub Pages, API keys cannot be used client-side
 // This service works in development only. For production, use a proxy service.
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasApiKey = isDevelopment && (!!process.env.GEMINI_API_KEY || !!process.env.API_KEY);
+// Vite exposes env vars via import.meta.env while Node scripts use process.env.
+// We unify access so local dev works with either GEMINI_API_KEY or VITE_GEMINI_API_KEY.
+// NOTE: Only use API key client-side in development; never commit a real key.
+const viteEnv: Record<string, string | undefined> = (typeof import.meta !== 'undefined' && (import.meta as any).env)
+    ? (import.meta as any).env
+    : {};
+
+const isDevelopment = (process.env.NODE_ENV || viteEnv.MODE) === 'development';
+
+function getRawApiKey(): string | undefined {
+    return (
+        // Prefer Vite-prefixed key when running in the browser dev environment
+        viteEnv.VITE_GEMINI_API_KEY ||
+        // Fallbacks for Node/legacy naming
+        process.env.GEMINI_API_KEY ||
+        process.env.VITE_GEMINI_API_KEY ||
+        process.env.API_KEY
+    );
+}
+
+const rawApiKey = getRawApiKey();
+const hasApiKey = isDevelopment && !!rawApiKey;
 
 let ai: GoogleGenAI | null = null;
 
 if (hasApiKey) {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
-  ai = new GoogleGenAI({ apiKey: apiKey! });
+    ai = new GoogleGenAI({ apiKey: rawApiKey! });
 } else if (!isDevelopment) {
-  console.warn('🔒 Production mode: Gemini API disabled for security. Use a proxy service for API calls.');
+    console.warn('🔒 Production mode: Gemini API disabled (no client key). Use a secure proxy for API calls.');
 } else {
-  console.warn('⚠️ Development mode: No API key found. Set GEMINI_API_KEY in .env.local');
+    const possible = ['VITE_GEMINI_API_KEY', 'GEMINI_API_KEY'];
+    console.warn(`⚠️ Development mode: No Gemini API key found. Set one of ${possible.join(', ')} in a .env or .env.local file.`);
 }
 
 /**
@@ -40,7 +60,7 @@ function ensureAI(): GoogleGenAI {
     if (!isDevelopment) {
       throw new Error('🔒 Gemini AI is disabled in production for security. This feature requires a proxy service.');
     } else {
-      throw new Error('⚠️ Gemini API key not found. Please set GEMINI_API_KEY in your .env.local file.');
+    throw new Error('⚠️ Gemini API key not found. Add VITE_GEMINI_API_KEY (preferred) or GEMINI_API_KEY to your .env.local and restart the dev server.');
     }
   }
   return ai;
