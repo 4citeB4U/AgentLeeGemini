@@ -50,6 +50,12 @@ jobs:
           npm ci --prefer-offline --no-audit --no-fund
         timeout-minutes: 10
 
+      - name: Debug vite installation
+        run: |
+          echo "Checking for vite..."
+          ls -la node_modules/.bin/ | grep vite || echo "vite not found in .bin"
+          npm list vite || echo "vite not in package list"
+
       - name: Verify installation
         run: |
           npm list --depth=0
