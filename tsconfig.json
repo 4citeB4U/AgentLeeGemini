@@ -1,0 +1,41 @@
+{
+  "_leeway_header": {
+    "TAG": "AGENT_LEE_TSCONFIG",
+    "COLOR_ONION_HEX": "NEON=#3178C6 FLUO=#2B6CB0 PASTEL=#DBEAFE",
+    "ICON_FAMILY": "lucide",
+    "ICON_GLYPH": "settings",
+    "ICON_SIG": "AL008002",
+    "5WH": "WHAT=TypeScript compiler configuration; WHY=Type checking and compilation settings; WHO=Agent Lee Development Team; WHERE=D:\\Agent-Lee_System\\tsconfig.json; WHEN=2025-09-22; HOW=JSON configuration for TypeScript compiler",
+    "SPDX-License-Identifier": "MIT",
+    "AGENTS": "GEMINI, CLAUDE, GPT4, LLAMA, QWEN"
+  },
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

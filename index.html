@@ -1,0 +1,150 @@
+<!--
+LEEWAY HEADER — DO NOT REMOVE
+TAG: AGENT_LEE_HTML_ENTRY
+COLOR_ONION_HEX: NEON=#FF8C00 FLUO=#FFA500 PASTEL=#FFD700
+ICON_FAMILY: lucide
+ICON_GLYPH: code
+ICON_SIG: AL001002
+5WH: WHAT=Agent Lee HTML entry point; WHY=SPA bootstrap and resource loading; WHO=Agent Lee Development Team; WHERE=D:\Agent-Lee_System\index.html; WHEN=2025-09-22; HOW=HTML5 with React module mounting
+SPDX-License-Identifier: MIT
+AGENTS: GEMINI, CLAUDE, GPT4, LLAMA, QWEN
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Lee Multi-Tool - Classified Intelligence Hub | AI-Powered Analysis</title>
+    <meta name="description" content="Agent Lee Multi-Tool: Advanced AI-powered intelligence hub with research, analysis, communication, and multi-modal capabilities. Secure, fast, and reliable." />
+    <meta name="keywords" content="AI assistant, intelligence analysis, research tool, multi-modal AI, secure communication, Agent Lee" />
+    <meta name="author" content="Agent Lee Development Team" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agent-lee.com/" />
+    <meta property="og:title" content="Agent Lee Multi-Tool - Classified Intelligence Hub" />
+    <meta property="og:description" content="Advanced AI-powered intelligence hub with research, analysis, communication, and multi-modal capabilities." />
+    <meta property="og:image" content="/Agent-Lee-Avatar.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://agent-lee.com/" />
+    <meta property="twitter:title" content="Agent Lee Multi-Tool - Classified Intelligence Hub" />
+    <meta property="twitter:description" content="Advanced AI-powered intelligence hub with research, analysis, communication, and multi-modal capabilities." />
+    <meta property="twitter:image" content="/Agent-Lee-Avatar.png" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Agent Lee Multi-Tool",
+      "description": "Advanced AI-powered intelligence hub with research, analysis, communication, and multi-modal capabilities",
+      "url": "https://agent-lee.com",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Agent Lee Development Team",
+        "url": "https://agent-lee.com"
+      },
+      "featureList": [
+        "AI-powered research and analysis",
+        "Multi-modal content generation",
+        "Secure communication tools",
+        "Document analysis and processing",
+        "Real-time voice interaction",
+        "Image generation and editing"
+      ]
+    }
+    </script>
+    
+    <!-- FAQPage for Voice Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Agent Lee Multi-Tool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Agent Lee Multi-Tool is an advanced AI-powered intelligence hub that provides research, analysis, communication, and multi-modal AI capabilities in a secure, classified environment."
+          }
+        },
+        {
+          "@type": "Question", 
+          "name": "What features does Agent Lee offer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Agent Lee offers AI research, text generation, image creation, document analysis, secure communication, voice interaction, and real-time intelligence gathering capabilities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Agent Lee secure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Agent Lee implements advanced security measures including input sanitization, prompt injection protection, rate limiting, and secure data handling protocols."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- ADDED: Font Awesome for Notepad Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- File Parsing Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.15.1/dist/esm/ort.min.js",
+    "@xenova/transformers": "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js"
+  }
+}
+</script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-900">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

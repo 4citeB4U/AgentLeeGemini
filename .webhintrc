@@ -1,0 +1,10 @@
+{
+  "extends": ["webhint:default"],
+  "hints": {
+    "axe/aria-valid-attr-value": "off",
+    "axe/aria": "off"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}

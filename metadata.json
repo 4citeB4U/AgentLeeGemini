@@ -1,0 +1,18 @@
+{
+  "_leeway_header": {
+    "TAG": "AGENT_LEE_METADATA",
+    "COLOR_ONION_HEX": "NEON=#8B5CF6 FLUO=#7C3AED PASTEL=#DDD6FE",
+    "ICON_FAMILY": "lucide",
+    "ICON_GLYPH": "database",
+    "ICON_SIG": "AL008008",
+    "5WH": "WHAT=Application metadata and configuration; WHY=Runtime configuration and app metadata; WHO=Agent Lee Development Team; WHERE=D:\\Agent-Lee_System\\metadata.json; WHEN=2025-09-22; HOW=JSON metadata configuration",
+    "SPDX-License-Identifier": "MIT",
+    "AGENTS": "GEMINI, CLAUDE, GPT4, LLAMA, QWEN"
+  },
+  "name": "Copy of Next steps? of 4LEEWAY-Multitool",
+  "description": "A versatile web application that bundles Text Generation, Image Generation, Chat, Media Analysis, and Web Research capabilities into a single, intuitive interface using the Gemini API.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
