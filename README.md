@@ -206,9 +206,17 @@ npm install
 
 ### 2. **Environment Setup**
 ```bash
-# Create .env file
-echo "VITE_GEMINI_API_KEY=your_api_key_here" > .env
+# Create .env.local file (local development only - never commit!)
+echo "GEMINI_API_KEY=your_api_key_here" > .env.local
 ```
+
+### 🔒 **Security Note**
+Agent Lee uses **secure environment handling**:
+- **Local Development**: API key in `.env.local` (gitignored)
+- **Production**: GitHub Environment secrets (server-side only)
+- **No client-side exposure**: API keys never reach the browser bundle
+
+For production deployment, your API key is securely stored in GitHub Environment secrets and only used during build time.
 
 ### 3. **Launch Development**
 ```bash

@@ -16,11 +16,35 @@ import { buildAgentLeeSystemPrompt } from '../src/prompts'; // Import the new pr
 import { geminiApiLimiter } from '../utils/rateLimiter'; // FIX: Import the API rate limiter
 import type { Note } from '../types';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set");
+// SECURITY: For production GitHub Pages, API keys cannot be used client-side
+// This service works in development only. For production, use a proxy service.
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasApiKey = isDevelopment && (!!process.env.GEMINI_API_KEY || !!process.env.API_KEY);
+
+let ai: GoogleGenAI | null = null;
+
+if (hasApiKey) {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
+  ai = new GoogleGenAI({ apiKey: apiKey! });
+} else if (!isDevelopment) {
+  console.warn('🔒 Production mode: Gemini API disabled for security. Use a proxy service for API calls.');
+} else {
+  console.warn('⚠️ Development mode: No API key found. Set GEMINI_API_KEY in .env.local');
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+/**
+ * Check if Gemini AI is available and throw user-friendly error if not
+ */
+function ensureAI(): GoogleGenAI {
+  if (!ai) {
+    if (!isDevelopment) {
+      throw new Error('🔒 Gemini AI is disabled in production for security. This feature requires a proxy service.');
+    } else {
+      throw new Error('⚠️ Gemini API key not found. Please set GEMINI_API_KEY in your .env.local file.');
+    }
+  }
+  return ai;
+}
 
 /**
  * A wrapper function to handle common Gemini API errors, specifically for rate limiting and quota issues.
@@ -66,7 +90,7 @@ async function handleGeminiError<T>(apiCall: () => Promise<T>): Promise<T> {
 export const classifyVisualRequest = async (prompt: string): Promise<boolean> => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
     const systemInstruction = "You are a request classifier. Your task is to determine if a user's request requires using the device's camera to see something in the real world. Answer only with 'YES' or 'NO'. For example, if the user asks 'what am I wearing?' or 'can you see this?', answer 'YES'. If they ask 'what is the capital of France?', answer 'NO'.";
     
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: `User request: "${prompt}"`,
         config: {
@@ -122,7 +146,7 @@ User prompt: "can you generate an image of a dragon"
 Your response:
 {"is_tool_use": true}`;
     
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: `User prompt: "${prompt}"`,
         config: {
@@ -160,7 +184,7 @@ export const generateContentStreamMultiModal = (prompt: string, base64Data: stri
     const imagePart = { inlineData: { data: base64Data, mimeType } };
     const textPart = { text: prompt };
     
-    return ai.models.generateContentStream({
+    return ensureAI().models.generateContentStream({
         model: "gemini-2.5-flash",
         contents: { parts: [imagePart, textPart] },
     });
@@ -168,7 +192,7 @@ export const generateContentStreamMultiModal = (prompt: string, base64Data: stri
 
 
 export const generateText = async (prompt: string, systemInstruction?: string) => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
-  const response = await ai.models.generateContent({
+  const response = await ensureAI().models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
     config: systemInstruction ? { systemInstruction } : undefined,
@@ -177,7 +201,7 @@ export const generateText = async (prompt: string, systemInstruction?: string) =
 }));
 
 export const generateImage = async (prompt: string) => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
-  const response = await ai.models.generateImages({
+  const response = await ensureAI().models.generateImages({
     model: "imagen-4.0-generate-001",
     prompt,
     config: {
@@ -205,7 +229,7 @@ export const generateImage = async (prompt: string) => geminiApiLimiter.schedule
  * @returns A promise that resolves to the data URL of the edited image.
  */
 export const editImage = async (prompt: string, base64Data: string, mimeType: string): Promise<string> => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: 'gemini-2.5-flash-image-preview',
         contents: {
             parts: [
@@ -241,7 +265,7 @@ export const editImage = async (prompt: string, base64Data: string, mimeType: st
 
 
 export const generateMultipleImages = async (prompt: string, count: number): Promise<string[]> => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
-    const response = await ai.models.generateImages({
+    const response = await ensureAI().models.generateImages({
         model: "imagen-4.0-generate-001",
         prompt,
         config: {
@@ -276,7 +300,7 @@ export const analyzeMedia = async (prompt: string, base64Data: string, mimeType:
         text: prompt
     };
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: { parts: [imagePart, textPart] },
     });
@@ -298,7 +322,7 @@ export const generateFromAudio = async (prompt: string, base64Data: string, mime
         text: fullPrompt
     };
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: { parts: [audioPart, textPart] },
     });
@@ -322,7 +346,7 @@ export const analyzeImageFromUrl = async (prompt: string, imageUrl: string) => {
 
 export const analyzeDocument = async (prompt: string, documentText: string) => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
     const fullPrompt = `Please analyze the following document and answer the user's question.\n\nDOCUMENT:\n"""\n${documentText}\n"""\n\nQUESTION:\n"""\n${prompt}\n"""\n\nANALYSIS:`;
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: fullPrompt,
     });
@@ -331,7 +355,7 @@ export const analyzeDocument = async (prompt: string, documentText: string) => g
 
 
 export const research = async (prompt: string) => geminiApiLimiter.schedule(() => handleGeminiError(async () => {
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
         config: {
@@ -355,7 +379,7 @@ ${noteContent}
 
 ANALYSIS:`;
 
-  const response = await ai.models.generateContent({
+  const response = await ensureAI().models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
   });
@@ -370,7 +394,7 @@ export const draftEmail = async (prompt: string, context?: { recipient?: string,
   \nINSTRUCTIONS: "${prompt}"
   \nBased on the instructions, write only the body of the email. Do not include a subject line.`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: fullPrompt,
     });
@@ -383,7 +407,7 @@ export const draftSms = async (prompt: string, recipient?: string) => geminiApiL
   \nINSTRUCTIONS: "${prompt}"
   \nDraft ONLY the body of the text message.`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: fullPrompt,
     });
@@ -404,7 +428,7 @@ ${emailBody}
 
 SUMMARY AND ACTION ITEMS:`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
     });
@@ -426,7 +450,7 @@ ${transcript}
 
 ANALYSIS:`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
     });
@@ -454,7 +478,7 @@ export const findRelevantMemory = async (prompt: string, memories: Note[]): Prom
     
     const fullPrompt = `PAST CONVERSATIONS:\n${memoryList}\n\nCURRENT USER QUERY: "${prompt}"\n\nMOST RELEVANT ID:`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: fullPrompt,
         config: {
@@ -503,7 +527,7 @@ export const generateCharacterProfileFromImage = async (base64Data: string, mime
 2. An inferred 'personality' description, including their likely demeanor, backstory, and traits.`
     };
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: { parts: [imagePart, textPart] },
         config: {
@@ -613,7 +637,7 @@ export const analyzeAudioTranscription = async (transcription: string, fileName:
     
     Be thorough but concise in your analysis.`;
 
-    const response = await ai.models.generateContent({
+    const response = await ensureAI().models.generateContent({
         model: "gemini-2.5-flash",
         contents: `Audio File: ${fileName}\n\nTranscription:\n${transcription}`,
         config: {
@@ -635,7 +659,7 @@ export const createChat = (userName?: string): Chat => {
     // Build the comprehensive system prompt for Agent Lee
     const systemInstruction = buildAgentLeeSystemPrompt(userName);
 
-    return ai.chats.create({
+    return ensureAI().chats.create({
         model: 'gemini-2.5-flash',
         config: {
             systemInstruction,

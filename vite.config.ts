@@ -23,8 +23,10 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        // DO NOT expose API keys to client bundle
+        // Only expose safe build-time flags
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.BUILD_TIME': JSON.stringify(new Date().toISOString()),
       },
       resolve: {
         alias: {
