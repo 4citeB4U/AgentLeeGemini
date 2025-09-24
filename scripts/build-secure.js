@@ -1,16 +1,5 @@
-/* LEEWAY HEADER — DO NOT REMOVE# Create public directory if it doesn't exist
-const publicDir = path.join(path.dirname(__dirname), 'public');
-if (!fs.existsSync(publicDir)) {
-  fs.mkdirSync(publicDir, { recursive: true });
-}
-
-// Generate build manifest with timestamp
-const buildManifest = {
-  buildTime: new Date().toISOString(),
-  hasApiKey: true,
-  version: JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), 'package.json'), 'utf8')).version,
-  environment: 'production'
-};EE_BUILD_SCRIPT
+/* LEEWAY HEADER — DO NOT REMOVE
+TAG: AGENT_LEE_BUILD_SCRIPT
 COLOR_ONION_HEX: NEON=#10B981 FLUO=#059669 PASTEL=#A7F3D0
 ICON_FAMILY: lucide
 ICON_GLYPH: hammer
@@ -49,10 +38,11 @@ if (!fs.existsSync(publicDir)) {
 }
 
 // Generate build manifest with timestamp
+const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
 const buildManifest = {
   buildTime: new Date().toISOString(),
-  hasApiKey: true,
-  version: require('../package.json').version,
+  hasApiKey: !!GEMINI_API_KEY,
+  version: packageJson.version,
   environment: 'production'
 };
 
