@@ -45,8 +45,7 @@ export default defineConfig(({ mode }) => {
           output: {
             manualChunks: {
               vendor: ['react', 'react-dom'],
-              genai: ['@google/genai'],
-              transformers: ['@xenova/transformers', 'onnxruntime-web']
+              genai: ['@google/genai']
             }
           }
         }
