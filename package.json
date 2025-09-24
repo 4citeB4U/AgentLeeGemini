@@ -33,7 +33,7 @@
     "build": "node scripts/build-secure.js && vite build",
     "build:github": "npm run build:secure && npm run vite:build",
     "build:secure": "node scripts/build-secure.js",
-    "vite:build": "npx --no-install vite build",
+    "vite:build": "vite build",
     "build:ci": "npm run clean && npm run build:github",
     "clean": "rimraf dist node_modules/.vite",
     "preview": "vite preview",

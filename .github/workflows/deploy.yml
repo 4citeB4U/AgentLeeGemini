@@ -47,7 +47,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci --prefer-offline --no-audit --no-fund
+          npm ci --include=dev --prefer-offline --no-audit --no-fund
         timeout-minutes: 10
 
       - name: Debug vite installation
