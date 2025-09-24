@@ -31,7 +31,8 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build-secure.js && vite build",
-    "build:github": "vite build",
+    "build:github": "npm run build:secure && vite build",
+    "build:secure": "node scripts/build-secure.js",
     "build:ci": "npm run clean && npm run build:github",
     "clean": "rimraf dist node_modules/.vite",
     "preview": "vite preview",

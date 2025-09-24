@@ -58,6 +58,10 @@ jobs:
       - name: Build application
         run: |
           echo "Building application..."
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Current directory: $(pwd)"
+          echo "Package.json exists: $(test -f package.json && echo 'yes' || echo 'no')"
           npm run build:github
         env:
           NODE_ENV: production
