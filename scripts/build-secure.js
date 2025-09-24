@@ -28,7 +28,11 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
   console.warn('⚠️  No GEMINI_API_KEY found - building without API features');
-  process.exit(0);
+  console.log('💡 For GitHub Actions: Ensure GEMINI_API_KEY secret is set');
+  console.log('💡 For local development: Use .env.local file');
+} else {
+  console.log('✅ GEMINI_API_KEY found - building with full API features');
+  console.log(`🔑 API key starts with: ${GEMINI_API_KEY.substring(0, 8)}...`);
 }
 
 // Create public directory if it doesn't exist
