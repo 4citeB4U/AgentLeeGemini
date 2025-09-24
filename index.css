@@ -1,0 +1,107 @@
+/* LEEWAY HEADER — DO NOT REMOVE
+TAG: AGENT_LEE_STYLES
+COLOR_ONION_HEX: NEON=#EC4899 FLUO=#DB2777 PASTEL=#FBCFE8
+ICON_FAMILY: lucide
+ICON_GLYPH: palette
+ICON_SIG: AL001003
+5WH: WHAT=Global CSS styles and Tailwind directives; WHY=Application styling and design system; WHO=Agent Lee Development Team; WHERE=D:\Agent-Lee_System\index.css; WHEN=2025-09-23; HOW=Tailwind CSS directives with custom styles
+SPDX-License-Identifier: MIT
+AGENTS: GEMINI, CLAUDE, GPT4, LLAMA, QWEN
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Agent Lee Global Styles */
+@layer base {
+  body {
+    @apply bg-gray-900 text-white font-sans antialiased;
+  }
+  
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .agent-lee-gradient {
+    @apply bg-gradient-to-br from-purple-600 via-pink-500 to-purple-700;
+  }
+  
+  .agent-lee-button {
+    @apply bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .agent-lee-card {
+    @apply bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-200;
+  }
+  
+  .agent-lee-input {
+    @apply bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent;
+  }
+}
+
+@layer utilities {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Custom scrollbar for Agent Lee */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-600 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-500;
+}
+
+/* Loading animations */
+.pulse-purple {
+  animation: pulse-purple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-purple {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-spacing {
+    @apply p-2 space-y-2;
+  }
+  
+  .mobile-text {
+    @apply text-sm;
+  }
+  
+  .mobile-button {
+    @apply text-sm px-3 py-2;
+  }
+}
